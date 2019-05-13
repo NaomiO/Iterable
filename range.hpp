@@ -1,4 +1,4 @@
-namespace itertools
+using namespace itertools
 {
 
 
