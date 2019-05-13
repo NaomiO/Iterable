@@ -2,89 +2,73 @@
 namespace itertools
 {
 
-template <class T, class E>
-/*
-* _chain class, using two iteratables to iterate over them.
-* the values given to the constructor must be a iteratable objects (implementing begin() and end() functions).
-* and an iterator (ofcourse) which implements the following operators: != (not equal), ++ (prefix increment).
-* the _chain class contains inner iterator.
-* Note: calling the chain(T,E) function instead of the class _chain is recommended.
-*/
+template <class A, class B>
+
 class _chain
 {
-    // Private variables and methods
 private:
-    T _iteratable_A;    // first iteratable - should be an iteratable
-    E _iteratable_B;    // second iteratable - should be an iteratable
-
-    // Inner class (iterator)
+    A first;   
+    B second;    
+    
     template <typename U, typename V>
     class iterator
     {
     public:
-        // variables
-        U _iterator_A; //  should be an iterator
-        V _iterator_B; //  should be an iterator
+ 
+        U itr1; 
+        V itr2; 
 
-        bool iterateA;
+        bool flag;
 
-        //constructor
-        iterator(U iteratable_A, V iteratable_B) : _iterator_A(iteratable_A), _iterator_B(iteratable_B), iterateA(true) {}
+        iterator(U first, V second) : itr1(first), itr2(second), flag(true) {}
 
-        // operators
         bool operator!=(_chain::iterator<U,V> const &other) 
         {
-            if (iterateA && !(_iterator_A != (other._iterator_A))) // if reached the end of the first iterator.
-            // switch to the other iterator by setting the flag "iterateA" to false.
-                iterateA = false;
+            if (flag && !(itr1 != (other.itr1)))
+                flag = false;
 
-            if(iterateA)
-                return (_iterator_A != (other._iterator_A));
+            if(flag)
+                return (itr1 != (other.itr1));
             else 
-                return (_iterator_B != (other._iterator_B));
+                return (itr != (other.itr2));
 
             
         }
 
-        decltype(*_iterator_A) operator*() const
+        decltype(*itr1) operator*() const
         {
-            if(iterateA)
-                return *_iterator_A;
+            if(flag)
+                return *itr1;
             else
-                return *_iterator_B;
+                return *itr2;
         }
 
         _chain::iterator<U,V> &operator++()
         {
-            if(iterateA)
-                ++_iterator_A;
+            if(flag)
+                ++itr1;
             else 
-                ++_iterator_B;
+                ++itr2;
             
             return *this;
         }
     };
 
 public:
-    _chain(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
+    _chain(A from, B to) : first(from), second(to) {} // constructor
 
     auto begin() const{ 
-        return  _chain::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
+        return  _chain::iterator<decltype(first.begin()),decltype(second.begin())>(first.begin(), second.begin()); }  // iteratable object
 
     auto end() const {
-        return _chain::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
+        return _chain::iterator<decltype(first.end()),decltype(second.end())>(first.end(), second.end()); }  // iteratable object  
 };  // class
 
-template <typename T, typename E>
-/*
-* chain function, use in loops to iterate over two iteratables.
-* Example use case: 
-* for(int i : chain(range('A','D'), string("NIKOLAI")))
-*   // do somethin...
-*/
-_chain<T, E> chain(T first, E second)
+template <typename A, typename B>
+
+_chain<A, B> chain(A chain1, B chain2)
 {
-    return _chain<T, E>(first, second);
+    return _chain<A, B>(chain1, chain2);
 }
 
-} // namespace itertools
+} 
