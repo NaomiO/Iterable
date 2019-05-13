@@ -68,5 +68,9 @@ _range<T> range(T from, T to)
 {
     return _range<T>(from, to);
 }
+<<<<<<< HEAD
 
 } // namespace itertools
+=======
+}
+>>>>>>> a1766a751cd9d702865ac949f50007730db162c1
