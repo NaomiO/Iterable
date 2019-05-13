@@ -44,7 +44,7 @@ public:
     
 template <typename T>
 
-range<T> range(T from, T to)
+range<T> myrange(T from, T to)
 {
     return range<T>(from, to);
 }
