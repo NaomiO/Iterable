@@ -1,11 +1,10 @@
-#include <set> // for set operations
+#include <set>
 #include <vector>
 #include <cmath>
 #include <iostream>
 namespace itertools
 {
 
-// C++ template to print std::set
 template <typename T>
 std::ostream &operator<<(std::ostream &os, const std::vector<T> &S)
 {
@@ -13,7 +12,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &S)
 
     auto it = S.begin();
     if(it != S.end())
-    { // first element is without comma seperator.
+    { 
         os << *it; 
         ++it;
     }
@@ -30,17 +29,10 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &S)
 }
 
 template <class T>
-/*
-* _powerset class, using two values to iterate between them.
-* the values must be a primitive type or an object, if its an object
-* then it must implement the following operators: != (not equal), ++ (prefix increment).
-* the _powerset class contains inner iterator.
-* Note: calling the powerset(T,T) function instead of the class _powerset is recommended.
-*/
+
 class _powerset
 {
 
-    // Private variables and methods
 private:
     T _from; // starting point
 
@@ -86,7 +78,7 @@ private:
            
             unsigned int i = index;
             while (i != 0 && _element_iterator != _element_iterator_end)
-            { // convert to binary, each '1' digit is an index of an element.
+            { 
                 unsigned int r = i % 2;
                 i = i >> 1; //divide by 2.
 
@@ -114,12 +106,7 @@ public:
 };                                                                                                                                                  // class
 
 template <typename T>
-/*
-* powerset function, use in loops to iterate between two values.
-* Example use case: 
-* for(int i : powerset(1,5))
-*   // do somethin...
-*/
+
 _powerset<T> powerset(T from)
 {
     return _powerset<T>(from);
