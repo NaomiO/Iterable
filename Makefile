@@ -3,10 +3,10 @@
 all: demo
 	./$<
 
-demo:  Demo.o 
+demo:  demo.o 
 	clang++-5.0 -std=c++17 $^ -o demo
 
-test:  Test.o 
+test:  test.o 
 	clang++-5.0 -std=c++17 $^ -o test
 
 %.o: %.cpp range.hpp chain.hpp powerset.hpp product.hpp zip.hpp
