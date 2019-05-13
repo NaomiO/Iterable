@@ -21,7 +21,7 @@ private:
         iterator(T vall) : val(vall){}
 
         // operators
-        bool operator!=(_range::iterator const &other) const
+        bool operator!=(range::iterator const &other) const
         { 
             return val != (other.val);
         }
@@ -41,9 +41,9 @@ private:
     };
 
 public:
-    _range(T from, T to) : _from(from), _to(to) {}                      // constructor
-    _range::iterator begin() const { return _range::iterator(_from); }  // iteratable object
-    _range::iterator end() const { return _range::iterator(_to); }      // iteratable object
+    range(T from, T to) : _from(from), _to(to) {}                      // constructor
+    range::iterator begin() const { return range::iterator(_from); }  // iteratable object
+    range::iterator end() const { return range::iterator(_to); }      // iteratable object
 }; // class
 
 
@@ -55,8 +55,8 @@ template <typename T>
 * for(int i : range(1,5))
 *   // do somethin...
 */
-_range<T> range(T from, T to)
+range<T> range(T from, T to)
 {
-    return _range<T>(from, to);
+    return range<T>(from, to);
 }
 }    
