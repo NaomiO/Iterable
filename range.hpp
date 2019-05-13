@@ -1,24 +1,28 @@
 namespace itertools
 {
 
+
 template <class T>
 
 class _range
 {
 
-
 private:
-    T start; 
-    T end;   
+    T _from; // starting point
+    T _to;   // stopping point.
 
+    // Inner class (iterator)
     class iterator
     {
 
     public:
+        // variables
         T val;
 
-        iterator(T it_val) : val(it_val){}
+        //constructor
+        iterator(T vall) : val(vall){}
 
+        // operators
         bool operator!=(_range::iterator const &other) const
         { 
             return val != (other.val);
@@ -32,16 +36,18 @@ private:
 
         _range::iterator &operator++()
         {
+
             ++val;
             return *this;
         }
     };
 
 public:
-    _range(T from, T to) : start(from), end(to) {}                      
-    _range::iterator begin() const { return _range::iterator(start); }  
-    _range::iterator end() const { return _range::iterator(end); }     
-};
+    _range(T from, T to) : _from(from), _to(to) {}                      // constructor
+    _range::iterator begin() const { return _range::iterator(_from); }  // iteratable object
+    _range::iterator end() const { return _range::iterator(_to); }      // iteratable object
+}; // class
+
 
 
 template <typename T>
