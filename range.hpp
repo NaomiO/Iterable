@@ -1,4 +1,5 @@
-using namespace itertools;
+namespace itertools
+{
 
 
 template <class T>
@@ -66,4 +67,5 @@ template <typename T>
 _range<T> range(T from, T to)
 {
     return _range<T>(from, to);
+}
 }
