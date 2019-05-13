@@ -3,7 +3,7 @@ namespace itertools
 
 template <class T>
 
-class _range
+class range
 {
 
 private:
@@ -18,7 +18,7 @@ private:
         T t_val;
         iterator(T itr) : t_val(itr){}
 
-        bool operator!=(_range::iterator const &other) const
+        bool operator!=(range::iterator const &other) const
         { 
             return t_val != (other.t_val);
         }
@@ -28,7 +28,7 @@ private:
             return t_val;
         }
 
-        _range::iterator &operator++()
+        range::iterator &operator++()
         {
             ++t_val;
             return *this;
@@ -36,17 +36,17 @@ private:
     };
 
 public:
-    _range(T from, T to) : start(from), fin(to) {}                     
-    _range::iterator begin() const { return _range::iterator(start); } 
-    _range::iterator end() const { return _range::iterator(fin); }      
+    range(T from, T to) : start(from), fin(to) {}                     
+    range::iterator begin() const { return _range::iterator(start); } 
+    range::iterator end() const { return _range::iterator(fin); }      
 }; 
 
     
 template <typename T>
 
-_range<T> range(T from, T to)
+range<T> range(T from, T to)
 {
-    return _range<T>(from, to);
+    return range<T>(from, to);
 }
 
 } 
