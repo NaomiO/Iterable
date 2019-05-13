@@ -1,62 +1,77 @@
 #pragma once
 namespace itertools
 {
-template <class T>
-
+template <typename T>
 class range
 {
+  private:
+	T _begin;
+	T _end;
 
-private:
-    T _from; // starting point
-    T _to;   // stopping point.
+  public:
+	
+	range <T> (T _begin,T _end):_begin(_begin) , _end(_end){}
 
-    class iterator
-    {
+
+	class iterator
+	{
+	  private:
+		T _iter;
 
     public:
-        // variables
-        T val;
+		iterator( T _iter ) : _iter(_iter) {}
 
-        //constructor
-        iterator(T vall) : val(vall){}
+		auto &operator*() const
+		{
+			
+				return _iter;
+			
+		}
 
-        // operators
-        bool operator!=(range::iterator const &other) const
-        { 
-            return val != (other.val);
-        }
+		// auto *operator-> () const
+		// {
+		
+		// 		return &_iter;
+		
+		// }
 
-        T operator*() const
-        {
-            return val;
-        }
+		// ++i;
+		iterator &operator++()
+		{
+			++(_iter);
+			return *this;
+		}
 
+		// i++;
+		// Usually iterators are passed by value and not by const& as they are small.
+		const iterator operator++(int)
+		{
+			iterator tmp = *this;
+			(_iter)++;
+			return tmp;
+		}
 
-        range::iterator &operator++()
-        {
+		bool operator==(const iterator &rhs) const
+		{
+			return (_iter) == (rhs._iter);
+		}
 
-            ++val;
-            return *this;
-        }
-    };
+		bool operator!=(const iterator &rhs) const
+		{
+			return (_iter) != (rhs._iter);
+		}
+	};
 
 public:
-    range(T from, T to) : _from(from), _to(to) {}                      // constructor
-    range::iterator begin() const { return range::iterator(_from); }  // iteratable object
-    range::iterator end() const { return range::iterator(_to); }      // iteratable object
-}; // class
+	iterator begin()
+	{
+		return range<T>::iterator(_begin);
+	}
 
+	iterator end()
+	{
+		return  range<T>::iterator(_end);
+	}
+};
+} // namespace itertools
 
-
-template <typename T>
-/*
-* range function, use in loops to iterate between two values.
-* Example use case: 
-* for(int i : range(1,5))
-*   // do somethin...
-*/
-range<T> range(T from, T to)
-{
-    return range<T>(from, to);
-}
-}    
