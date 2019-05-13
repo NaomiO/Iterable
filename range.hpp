@@ -1,77 +1,72 @@
-#pragma once
 namespace itertools
 {
-template <typename T>
-class range
+
+
+template <class T>
+/*
+* _range class, using two values to iterate between them.
+* the values must be a primitive type or an object, if its an object
+* then it must implement the following operators: != (not equal), ++ (prefix increment).
+* the _range class contains inner iterator.
+* Note: calling the range(T,T) function instead of the class _range is recommended.
+*/
+class _range
 {
-  private:
-	T _begin;
-	T _end;
 
-  public:
-	
-	range <T> (T _begin,T _end):_begin(_begin) , _end(_end){}
+// Private variables and methods
+private:
+    T _from; // starting point
+    T _to;   // stopping point.
 
-
-	class iterator
-	{
-	  private:
-		T _iter;
+    // Inner class (iterator)
+    class iterator
+    {
 
     public:
-		iterator( T _iter ) : _iter(_iter) {}
+        // variables
+        T val;
 
-		auto &operator*() const
-		{
-			
-				return _iter;
-			
-		}
+        //constructor
+        iterator(T vall) : val(vall){}
 
-		// auto *operator-> () const
-		// {
-		
-		// 		return &_iter;
-		
-		// }
+        // operators
+        bool operator!=(_range::iterator const &other) const
+        { 
+            return val != (other.val);
+        }
 
-		// ++i;
-		iterator &operator++()
-		{
-			++(_iter);
-			return *this;
-		}
+        T operator*() const
+        {
+            return val;
+        }
 
-		// i++;
-		// Usually iterators are passed by value and not by const& as they are small.
-		const iterator operator++(int)
-		{
-			iterator tmp = *this;
-			(_iter)++;
-			return tmp;
-		}
 
-		bool operator==(const iterator &rhs) const
-		{
-			return (_iter) == (rhs._iter);
-		}
+        _range::iterator &operator++()
+        {
 
-		bool operator!=(const iterator &rhs) const
-		{
-			return (_iter) != (rhs._iter);
-		}
-	};
+            ++val;
+            return *this;
+        }
+    };
 
 public:
-	iterator begin()
-	{
-		return range<T>::iterator(_begin);
-	}
+    _range(T from, T to) : _from(from), _to(to) {}                      // constructor
+    _range::iterator begin() const { return _range::iterator(_from); }  // iteratable object
+    _range::iterator end() const { return _range::iterator(_to); }      // iteratable object
+}; // class
 
-	iterator end()
-	{
-		return  range<T>::iterator(_end);
-	}
-};
+
+
+template <typename T>
+/*
+* range function, use in loops to iterate between two values.
+* Example use case: 
+* for(int i : range(1,5))
+*   // do somethin...
+*/
+_range<T> range(T from, T to)
+{
+    return _range<T>(from, to);
+}
+
 } // namespace itertools
-
