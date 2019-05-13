@@ -30,7 +30,7 @@ private:
             if(flag)
                 return (itr1 != (other.itr1));
             else 
-                return (itr != (other.itr2));
+                return (itr2 != (other.itr2));
 
             
         }
