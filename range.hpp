@@ -1,22 +1,15 @@
-using namespace itertools;
-
+#pragma once
+namespace itertools
+{
 template <class T>
-/*
-* _range class, using two values to iterate between them.
-* the values must be a primitive type or an object, if its an object
-* then it must implement the following operators: != (not equal), ++ (prefix increment).
-* the _range class contains inner iterator.
-* Note: calling the range(T,T) function instead of the class _range is recommended.
-*/
-class _range
+
+class range
 {
 
-// Private variables and methods
 private:
     T _from; // starting point
     T _to;   // stopping point.
 
-    // Inner class (iterator)
     class iterator
     {
 
@@ -66,3 +59,4 @@ _range<T> range(T from, T to)
 {
     return _range<T>(from, to);
 }
+}    
