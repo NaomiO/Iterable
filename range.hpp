@@ -37,8 +37,8 @@ private:
 
 public:
     range(T from, T to) : start(from), fin(to) {}                     
-    range::iterator begin() const { return _range::iterator(start); } 
-    range::iterator end() const { return _range::iterator(fin); }      
+    range::iterator begin() const { return range::iterator(start); } 
+    range::iterator end() const { return range::iterator(fin); }      
 }; 
 
     
