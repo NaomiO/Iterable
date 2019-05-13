@@ -8,7 +8,7 @@ class _range
 {
 
 private:
-    T _from; // starting point
+    T start; // starting point
     T _to;   // stopping point.
 
     // Inner class (iterator)
@@ -43,8 +43,8 @@ private:
     };
 
 public:
-    _range(T from, T to) : _from(from), _to(to) {}                      // constructor
-    _range::iterator begin() const { return _range::iterator(_from); }  // iteratable object
+    _range(T from, T to) : star(from), _to(to) {}                      // constructor
+    _range::iterator begin() const { return _range::iterator(start); }  // iteratable object
     _range::iterator end() const { return _range::iterator(_to); }      // iteratable object
 }; // class
 
