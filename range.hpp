@@ -9,7 +9,7 @@ class _range
 
 private:
     T start; // starting point
-    T _to;   // stopping point.
+    T fin;   // stopping point.
 
     // Inner class (iterator)
     class iterator
@@ -20,7 +20,7 @@ private:
         T val;
 
         //constructor
-        iterator(T vall) : val(vall){}
+        iterator(T itr) : val(itr){}
 
         // operators
         bool operator!=(_range::iterator const &other) const
@@ -43,9 +43,9 @@ private:
     };
 
 public:
-    _range(T from, T to) : start(from), _to(to) {}                      // constructor
+    _range(T from, T to) : start(from), fin(to) {}                      // constructor
     _range::iterator begin() const { return _range::iterator(start); }  // iteratable object
-    _range::iterator end() const { return _range::iterator(_to); }      // iteratable object
+    _range::iterator end() const { return _range::iterator(fin); }      // iteratable object
 }; // class
 
 
