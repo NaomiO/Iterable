@@ -11,7 +11,7 @@ std::ostream &operator<<(std::ostream &stream, const std::vector<T> &S)
     stream << "{";
 
     auto temp = S.begin();
-    if(it != S.end())
+    if(temp != S.end())
     { 
         stream << *temp; 
         ++temp;
