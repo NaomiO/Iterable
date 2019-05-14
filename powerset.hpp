@@ -6,50 +6,47 @@ namespace itertools
 {
 
 template <typename T>
-std::ostream &operator<<(std::ostream &os, const std::vector<T> &S)
+std::ostream &operator<<(std::ostream &stream, const std::vector<V> &vec)
 {
-    os << "{";
+    stream << "{";
 
-    auto it = S.begin();
-    if(it != S.end())
+    auto temp = vec.begin();
+    if(temp != vec.end())
     { 
-        os << *it; 
-        ++it;
+        stream << *temp; 
+        ++temp;
     }
 
-    while (it != S.end())
+    while (temp != vec.end())
     {
-        os << ',' << *it;
-        ++it;
+        stream << ',' << *temp;
+        ++temp;
     }
 
-    os << "}";
-
-    return os;
+    stream << "}";
+    return stream;
+    
 }
 
 template <class T>
 
-class _powerset
+class powerset
 {
 
 private:
-    T _from; // starting point
-
+    T from; 
     template <class E>
-    // Inner class (iterator)
+    
     class iterator
     {
 
     public:
-        // variables
 
         E _element_iterator_begin;
         E _element_iterator_end;
         unsigned int index;
         unsigned int num_of_elements;
 
-        //constructor
         iterator(E element_it_begin, E element_it_end) : _element_iterator_begin(element_it_begin),
                                                          _element_iterator_end(element_it_end),
                                                          index(0),
@@ -66,7 +63,7 @@ private:
         }
 
         // operators
-        bool operator!=(_powerset::iterator<E> const &other) const
+        bool operator!=(powerset::iterator<E> const &other) const
         {
             return ((num_of_elements - index) != (other.num_of_elements - other.index - 1));
         }
@@ -91,7 +88,7 @@ private:
             return S;
         }
 
-        _powerset::iterator<E> &operator++()
+        powerset::iterator<E> &operator++()
         {
 
             ++index;
@@ -100,16 +97,16 @@ private:
     };
 
 public:
-    _powerset(T from) : _from(from) {}                                                                                                              // constructor
-    auto begin() const { return _powerset::iterator<decltype(_from.begin())>(_from.begin(), _from.end()); } // iteratable object
-    auto end() const { return _powerset::iterator<decltype(_from.begin())>(_from.end(), _from.end()); }       // iteratable object
+    powerset(T start) : from(start) {}                                                                                                              // constructor
+    auto begin() const { return powerset::iterator<decltype(from.begin())>(from.begin(), from.end()); } // iteratable object
+    auto end() const { return powerset::iterator<decltype(from.begin())>(from.end(), from.end()); }       // iteratable object
 };                                                                                                                                                  // class
 
 template <typename T>
 
-_powerset<T> powerset(T from)
+powerset<T> power(T start)
 {
-    return _powerset<T>(from);
+    return powerset<T>(start);
 }
 
 } // namespace itertools
