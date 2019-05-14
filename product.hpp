@@ -6,7 +6,7 @@ namespace itertools
 
 template <class T, class E>
 
-class _product
+class product
 {
 private:
     T iterat1;    
@@ -25,7 +25,7 @@ private:
             itr2(iteratable_B),
             itr3(iteratable_B) {}
 
-        bool operator!=(_product::iterator<U,V> const &other) 
+        bool operator!=(product::iterator<U,V> const &other) 
         {            
             if ((itr1 != other.itr1) && !(itr2 != other.itr2))
             {
@@ -42,7 +42,7 @@ private:
                               decltype(*itr2)> (*itr1,*itr2);
         }
 
-        _product::iterator<U,V> &operator++()
+        product::iterator<U,V> &operator++()
         {
             ++itr2;
             return *this;
@@ -50,20 +50,20 @@ private:
     };
 
 public:
-    _product(T from, E to) : iterat1(from), iterat2(to) {} // constructor
+    product(T from, E to) : iterat1(from), iterat2(to) {} // constructor
 
     auto begin() const{ 
-        return  _product::iterator<decltype(iterat1.begin()),decltype(iterat2.begin())>(iterat1.begin(), iterat2.begin()); }  
+        return  product::iterator<decltype(iterat1.begin()),decltype(iterat2.begin())>(iterat1.begin(), iterat2.begin()); }  
 
     auto end() const {
-        return _product::iterator<decltype(iterat1.end()),decltype(iterat2.end())>(iterat1.end(), iterat2.end()); }  
+        return product::iterator<decltype(iterat1.end()),decltype(iterat2.end())>(iterat1.end(), iterat2.end()); }  
 };  // class
 
 template <typename T, typename E>
 
-_product<T, E> product(T first, E second)
+product<T, E> myproduct(T first, E second)
 {
-    return _product<T, E>(first, second);
+    return product<T, E>(first, second);
 }
 
 } 
