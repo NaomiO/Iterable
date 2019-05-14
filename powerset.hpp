@@ -4,60 +4,49 @@
 #include <iostream>
 namespace itertools
 {
-
-// C++ template to print std::set
 template <typename T>
-std::ostream &operator<<(std::ostream &os, const std::vector<T> &S)
+    
+std::ostream &operator<<(std::ostream &stream, const std::vector<T> &S)
 {
-    os << "{";
+    stream << "{";
 
-    auto it = S.begin();
+    auto temp = S.begin();
     if(it != S.end())
-    { // first element is without comma seperator.
-        os << *it; 
-        ++it;
+    { 
+        stream << *temp; 
+        ++temp;
     }
 
-    while (it != S.end())
+    while (temp != S.end())
     {
-        os << ',' << *it;
-        ++it;
+        stream << ',' << *temp;
+        ++temp;
     }
 
-    os << "}";
+    stream << "}";
 
-    return os;
+    return stream;
 }
 
 template <class T>
-/*
-* _powerset class, using two values to iterate between them.
-* the values must be a primitive type or an object, if its an object
-* then it must implement the following operators: != (not equal), ++ (prefix increment).
-* the _powerset class contains inner iterator.
-* Note: calling the powerset(T,T) function instead of the class _powerset is recommended.
-*/
+
 class _powerset
 {
 
-    // Private variables and methods
 private:
-    T _from; // starting point
-
+    T _from;
     template <class E>
-    // Inner class (iterator)
+        
     class iterator
     {
 
     public:
-        // variables
 
         E _element_iterator_begin;
         E _element_iterator_end;
         unsigned int index;
         unsigned int num_of_elements;
 
-        //constructor
         iterator(E element_it_begin, E element_it_end) : _element_iterator_begin(element_it_begin),
                                                          _element_iterator_end(element_it_end),
                                                          index(0),
@@ -86,9 +75,9 @@ private:
            
             unsigned int i = index;
             while (i != 0 && _element_iterator != _element_iterator_end)
-            { // convert to binary, each '1' digit is an index of an element.
+            { 
                 unsigned int r = i % 2;
-                i = i >> 1; //divide by 2.
+                i = i >> 1; 
 
                 if (r == 1)
                     S.emplace_back(*_element_iterator);
@@ -109,20 +98,15 @@ private:
 
 public:
     _powerset(T from) : _from(from) {}                                                                                                              // constructor
-    auto begin() const { return _powerset::iterator<decltype(_from.begin())>(_from.begin(), _from.end()); } // iteratable object
-    auto end() const { return _powerset::iterator<decltype(_from.begin())>(_from.end(), _from.end()); }       // iteratable object
+    auto begin() const { return _powerset::iterator<decltype(_from.begin())>(_from.begin(), _from.end()); } 
+    auto end() const { return _powerset::iterator<decltype(_from.begin())>(_from.end(), _from.end()); }       
 };                                                                                                                                                  // class
 
 template <typename T>
-/*
-* powerset function, use in loops to iterate between two values.
-* Example use case: 
-* for(int i : powerset(1,5))
-*   // do somethin...
-*/
+
 _powerset<T> powerset(T from)
 {
     return _powerset<T>(from);
 }
 
-} // namespace itertools
+} 
