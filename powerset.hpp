@@ -1,4 +1,4 @@
-#include <set> // for set operations
+#include <set> 
 #include <vector>
 #include <cmath>
 #include <iostream>
@@ -42,21 +42,21 @@ private:
 
     public:
 
-        E _element_iterator_begin;
-        E _element_iterator_end;
+        E itr_begin;
+        E itr_end;
         unsigned int index;
         unsigned int num_of_elements;
 
-        iterator(E element_it_begin, E element_it_end) : _element_iterator_begin(element_it_begin),
-                                                         _element_iterator_end(element_it_end),
+        iterator(E itr_start, E itr_fin) : itr_begin(itr_start),
+                                                         itr_end(itr_fin),
                                                          index(0),
                                                          num_of_elements(0)
         {
-            E _element_iterator = _element_iterator_begin;
-            while (_element_iterator != _element_iterator_end)
+            E element_iterator = itr_begin;
+            while (element_iterator != itr_end)
             {
                 ++num_of_elements;
-                ++_element_iterator;
+                ++element_iterator;
             }
 
             num_of_elements = std::pow(2, num_of_elements);
@@ -70,19 +70,19 @@ private:
 
         auto operator*() const
         {
-            E _element_iterator = _element_iterator_begin;
-            std::vector<typename std::remove_const<typename std::remove_reference<decltype(*_element_iterator_begin)>::type>::type> S;
+            E element_iterator = itr_begin;
+            std::vector<typename std::remove_const<typename std::remove_reference<decltype(*itr_begin)>::type>::type> S;
            
             unsigned int i = index;
-            while (i != 0 && _element_iterator != _element_iterator_end)
+            while (i != 0 && element_iterator != itr_end)
             { 
                 unsigned int r = i % 2;
                 i = i >> 1; 
 
                 if (r == 1)
-                    S.emplace_back(*_element_iterator);
+                    S.emplace_back(*element_iterator);
 
-                ++_element_iterator;
+                ++element_iterator;
             }
 
             return S;
