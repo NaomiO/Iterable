@@ -1,52 +1,63 @@
-#include <set>
+#include <set> // for set operations
 #include <vector>
 #include <cmath>
 #include <iostream>
 namespace itertools
 {
 
+// C++ template to print std::set
 template <typename T>
-std::ostream &operator<<(std::ostream &stream, const std::vector<V> &vec)
+std::ostream &operator<<(std::ostream &os, const std::vector<T> &S)
 {
-    stream << "{";
+    os << "{";
 
-    auto temp = vec.begin();
-    if(temp != vec.end())
-    { 
-        stream << *temp; 
-        ++temp;
+    auto it = S.begin();
+    if(it != S.end())
+    { // first element is without comma seperator.
+        os << *it; 
+        ++it;
     }
 
-    while (temp != vec.end())
+    while (it != S.end())
     {
-        stream << ',' << *temp;
-        ++temp;
+        os << ',' << *it;
+        ++it;
     }
 
-    stream << "}";
-    return stream;
-    
+    os << "}";
+
+    return os;
 }
 
 template <class T>
-
-class powerset
+/*
+* _powerset class, using two values to iterate between them.
+* the values must be a primitive type or an object, if its an object
+* then it must implement the following operators: != (not equal), ++ (prefix increment).
+* the _powerset class contains inner iterator.
+* Note: calling the powerset(T,T) function instead of the class _powerset is recommended.
+*/
+class _powerset
 {
 
+    // Private variables and methods
 private:
-    T from; 
+    T _from; // starting point
+
     template <class E>
-    
+    // Inner class (iterator)
     class iterator
     {
 
     public:
+        // variables
 
         E _element_iterator_begin;
         E _element_iterator_end;
         unsigned int index;
         unsigned int num_of_elements;
 
+        //constructor
         iterator(E element_it_begin, E element_it_end) : _element_iterator_begin(element_it_begin),
                                                          _element_iterator_end(element_it_end),
                                                          index(0),
@@ -63,7 +74,7 @@ private:
         }
 
         // operators
-        bool operator!=(powerset::iterator<E> const &other) const
+        bool operator!=(_powerset::iterator<E> const &other) const
         {
             return ((num_of_elements - index) != (other.num_of_elements - other.index - 1));
         }
@@ -75,7 +86,7 @@ private:
            
             unsigned int i = index;
             while (i != 0 && _element_iterator != _element_iterator_end)
-            { 
+            { // convert to binary, each '1' digit is an index of an element.
                 unsigned int r = i % 2;
                 i = i >> 1; //divide by 2.
 
@@ -88,7 +99,7 @@ private:
             return S;
         }
 
-        powerset::iterator<E> &operator++()
+        _powerset::iterator<E> &operator++()
         {
 
             ++index;
@@ -97,16 +108,21 @@ private:
     };
 
 public:
-    powerset(T start) : from(start) {}                                                                                                              // constructor
-    auto begin() const { return powerset::iterator<decltype(from.begin())>(from.begin(), from.end()); } // iteratable object
-    auto end() const { return powerset::iterator<decltype(from.begin())>(from.end(), from.end()); }       // iteratable object
+    _powerset(T from) : _from(from) {}                                                                                                              // constructor
+    auto begin() const { return _powerset::iterator<decltype(_from.begin())>(_from.begin(), _from.end()); } // iteratable object
+    auto end() const { return _powerset::iterator<decltype(_from.begin())>(_from.end(), _from.end()); }       // iteratable object
 };                                                                                                                                                  // class
 
 template <typename T>
-
-powerset<T> power(T start)
+/*
+* powerset function, use in loops to iterate between two values.
+* Example use case: 
+* for(int i : powerset(1,5))
+*   // do somethin...
+*/
+_powerset<T> powerset(T from)
 {
-    return powerset<T>(start);
+    return _powerset<T>(from);
 }
 
 } // namespace itertools
