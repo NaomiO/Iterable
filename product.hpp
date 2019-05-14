@@ -1,4 +1,4 @@
-#include <utility> // pair
+#include <utility> 
 
 namespace itertools
 {
