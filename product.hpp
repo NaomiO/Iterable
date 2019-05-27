@@ -1,69 +1,84 @@
-#include <utility> 
+#pragma once
 
-namespace itertools
-{
+#include <utility>
+#include <assert.h>
+
+// print the pair
+// taken from zip.hpp and present the same idea
 
 
-template <class T, class E>
 
-class product
-{
-private:
-    T iterat1;    
-    E iterat2;    
+using namespace std;
 
-    template <typename U, typename V>
-    class iterator
-    {
-    public:
-        U itr1; 
-        V itr2; 
-        V itr3; 
+namespace itertools{
 
-        iterator(U iteratable_A, V iteratable_B) : 
-            itr1(iteratable_A), 
-            itr2(iteratable_B),
-            itr3(iteratable_B) {}
 
-        bool operator!=(product::iterator<U,V> const &other) 
-        {            
-            if ((itr1 != other.itr1) && !(itr2 != other.itr2))
-            {
-                itr2 = itr3;
-                ++itr1;
+  bool flag = false; // variable that pointing on the B iterator length
+
+
+  template<typename CONTAINER_1,typename CONTAINER_2>
+  class product{
+
+          CONTAINER_1 A1;
+          CONTAINER_2 A2;
+
+          public:
+
+            product(CONTAINER_1 a,CONTAINER_2 b) : A1(a),A2(b) {
+              flag = false;
+              if(!(b.begin() != b.end())) // private check for b iterator
+              flag = true;
             }
 
-            return (itr1 != other.itr1);
-        }
+            template<typename E1,typename E2>
+            class iterator{
 
-        std::pair<decltype(*itr1),decltype(*itr2)> operator*() const
-        {
-            return std::pair< decltype(*itr1),
-                              decltype(*itr2)> (*itr1,*itr2);
-        }
+            public:
 
-        product::iterator<U,V> &operator++()
-        {
-            ++itr2;
-            return *this;
-        }
-    };
+              E1 begin_A; // start first
 
-public:
-    product(T from, E to) : iterat1(from), iterat2(to) {} // constructor
+              E2 begin_B; // start second
 
-    auto begin() const{ 
-        return  product::iterator<decltype(iterat1.begin()),decltype(iterat2.begin())>(iterat1.begin(), iterat2.begin()); }  
+              E2 temp_begin_B; // back to start with b temp
 
-    auto end() const {
-        return product::iterator<decltype(iterat1.end()),decltype(iterat2.end())>(iterat1.end(), iterat2.end()); }  
-};  // class
+              bool ready_for_next_round; // sign the position
 
-template <typename T, typename E>
 
-product<T, E> myproduct(T first, E second)
-{
-    return product<T, E>(first, second);
-}
+              iterator(E1 v1,E2 v2) : begin_A(v1),begin_B(v2),temp_begin_B(v2),ready_for_next_round(false){}
 
-} 
+              auto operator*() const
+              {
+               return pair<decltype(*begin_A),decltype(*begin_B)> (*begin_A,*begin_B);
+              }
+
+              iterator& operator++() { // advaced value
+              if(!ready_for_next_round)
+              ++begin_B;
+              return *this;
+              }
+
+              bool operator!= (iterator const & temp)
+              {
+                if ((begin_A != temp.begin_A) && !(begin_B != temp.begin_B)){
+                    ready_for_next_round = true;
+                  }
+                if(ready_for_next_round){
+                  begin_B = temp_begin_B;
+                  ++begin_A;
+                  ready_for_next_round = false;
+                }
+                return (begin_A != temp.begin_A && !flag); // check flag --
+              }
+
+            };
+
+            auto begin() const {
+              return iterator<decltype(A1.begin()),decltype(A2.begin())>(A1.begin(), A2.begin());
+             }
+            auto end() const {
+              return iterator<decltype(A1.end()),decltype(A2.end())>(A1.end(), A2.end());
+             }
+
+
+  };
+};

@@ -1,74 +1,69 @@
+#pragma once
 
-namespace itertools
-{
+#include <iterator>
+#include<iostream>
 
-template <class A, class B>
+using namespace std;
 
-class chain
-{
-private:
-    A first;   
-    B second;    
-    
-    template <typename U, typename V>
-    class iterator
+namespace itertools{
+
+  template <typename CONTAINER_1,typename CONTAINER_2>
+  class chain{
+
+  CONTAINER_1 A1; // iterator for first type
+  CONTAINER_2 A2; // iterator for second type
+
+  public:
+
+    chain(CONTAINER_1 a,CONTAINER_2 b) : A1(a),A2(b){}
+
+
+    template<typename E1,typename E2>
+    class iterator{
+    public :
+
+    E1 A; // first iterator
+    E2 B; // second iterator
+
+    int position; // 0 for the first range and 1 for the second
+
+    iterator(E1 val1,E2 val2) : A(val1),B(val2),position(0){}
+
+    iterator& operator++() // advaced value
     {
-    public:
- 
-        U itr1; 
-        V itr2; 
+        if(position == 0)
+          ++A;
+        else
+          ++B;
+        return *this;
+    }
 
-        bool flag;
+        decltype(*A) operator*() const
+     {
+             if(position == 0)
+                 return *A;
+             else
+                 return *B;
+    }
 
-        iterator(U first, V second) : itr1(first), itr2(second), flag(true) {}
+    bool operator!= (const iterator& temp)
+    {
+      if (position == 0 && !(A != (temp.A))) // continue to the next range
+           position = 1;
+      if(position == 0)
+      return A != temp.A;
+      else
+      return B != temp.B;
+     }
 
-        bool operator!=(chain::iterator<U,V> const &other) 
-        {
-            if (flag && !(itr1 != (other.itr1)))
-                flag = false;
-
-            if(flag)
-                return (itr1 != (other.itr1));
-            else 
-                return (itr2 != (other.itr2));
-
-            
-        }
-
-        decltype(*itr1) operator*() const
-        {
-            if(flag)
-                return *itr1;
-            else
-                return *itr2;
-        }
-
-        chain::iterator<U,V> &operator++()
-        {
-            if(flag)
-                ++itr1;
-            else 
-                ++itr2;
-            
-            return *this;
-        }
     };
 
-public:
-    chain(A from, B to) : first(from), second(to) {} // constructor
+    auto begin() const{
+       return iterator<decltype(A1.begin()),decltype(A2.begin())>(A1.begin(), A2.begin()); // iteratable object
+    }
+    auto end() const{
+       return iterator<decltype(A1.end()),decltype(A2.end())>(A1.end(), A2.end()); // iteratable object
+    }
 
-    auto begin() const{ 
-        return  chain::iterator<decltype(first.begin()),decltype(second.begin())>(first.begin(), second.begin()); }  // iteratable object
-
-    auto end() const {
-        return chain::iterator<decltype(first.end()),decltype(second.end())>(first.end(), second.end()); }  // iteratable object  
-};  // class
-
-template <typename A, typename B>
-
-chain<A, B> mychain(A chain1, B chain2)
-{
-    return mychain<A, B>(chain1, chain2);
-}
-
-} 
+  };
+};

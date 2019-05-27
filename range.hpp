@@ -1,52 +1,62 @@
-namespace itertools
-{
+#pragma once
 
-template <class T>
+#include <iterator>
+#include<iostream>
 
-class range
-{
+using namespace std;
 
-private:
-    T start; // start
-    T fin;   // end
+namespace itertools{
 
-    class iterator
+  template <class T>
+  class range{
+
+  T A; // start point
+  T B; // end point
+
+  public:
+
+    range(T a,T b) {
+      A = a;
+      B = b;
+    }
+
+    class iterator{
+    public :
+
+    T value; // "now" value
+
+    iterator(T val) : value(val){}
+
+    iterator& operator++() // advaced value
     {
+        ++value;
+        return *this;
+    }
 
-    public:
-  
-        T t_val;
-        iterator(T itr) : t_val(itr){}
+    bool operator== (range::iterator const & temp) const
+    {
+       return value == temp.value;
 
-        bool operator!=(range::iterator const &other) const
-        { 
-            return t_val != (other.t_val);
-        }
+     }
+    bool operator!= (range::iterator const & temp) const
+    {
+       return value != temp.value;
 
-        T operator*() const
-        {
-            return t_val;
-        }
+     }
+    T operator*() const
+    {
+       return value;
+     }
 
-        range::iterator &operator++()
-        {
-            ++t_val;
-            return *this;
-        }
     };
 
-public:
-    range(T from, T to) : start(from), fin(to) {}                     
-    range::iterator begin() const { return range::iterator(start); } 
-    range::iterator end() const { return range::iterator(fin); }      
-}; 
 
-    
-template <typename T>
+    auto begin() const{
+      return iterator(A);
+    }
+    auto end() const{
+      return iterator(B);
+     }
 
-range<T> myrange(T from, T to)
-{
-    return range<T>(from, to);
-}
-
-} 
+  };
+};
