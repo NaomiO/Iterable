@@ -1,66 +1,66 @@
-#include "iostream"
+#include <utility> 
+#include <iostream>
 
+namespace itertools
+{
 
-namespace itertools {
-
-template <typename Template1, typename Template2>
-class zip {
-
-private:
-Template1 it1;
-Template2 it2;
-
-public:
-zip(Template1 start, Template2 end) :  it1(start), it2(end) {
-}
-
-auto begin() const{
-        return iterator<decltype(it1.begin()),decltype(it2.begin())>(it1.begin(), it2.begin());
-}
-
-auto end() const{
-        return iterator<decltype(it1.end()),decltype(it2.end())>(it1.end(), it2.end());
-}
-
-template <typename C1, typename C2>
-class iterator {
-
-private:
-C1 it1;             // iterator A
-C2 it2;             // iterator B
-
-public:
-iterator(C1 itA, C2 itB) : it1(itA), it2(itB)  {
-}
-
-iterator<C1,C2>& operator++() {
-        ++it1;
-        ++it2;
-        return *this;
-
-}
-
-
-std::pair<decltype(*it1),decltype(*it2)> operator*() const {
-
-        return std::pair<decltype(*it1),decltype(*it2)> (*it1, *it2);
-}
-
-bool operator!=(iterator<C1,C2>  it){
-        return (it1 != it.it1) && (it2 != it.it2);
-
-}
-
-
-
-};
-
-
-};
 template <typename T,typename E>
-std::ostream &operator<<(std::ostream &os, const std::pair<T,E> &c){
-        os << c.first << ',' << c.second;
+std::ostream &operator<<(std::ostream &os, const std::pair<T,E>&p)
+{
+    os << p.first << ',' << p.second;
+    return os;
+}
 
-        return os;
+
+
+template <class T, class E>
+class _zip
+{
+private:
+    T _iteratable_A;   
+    E _iteratable_B; 
+  
+    template <typename U, typename V>
+    class iterator
+    {
+    public:
+        U _iterator_A;
+        V _iterator_B; 
+
+      iterator(U iteratable_A, V iteratable_B) : _iterator_A(iteratable_A), _iterator_B(iteratable_B) {}
+
+        bool operator!=(_zip::iterator<U,V> const &other) {return (_iterator_A != other._iterator_A) && (_iterator_B != other._iterator_B);}
+
+        std::pair<decltype(*_iterator_A),decltype(*_iterator_B)> operator*() const
+        {
+            return std::pair< decltype(*_iterator_A),
+                              decltype(*_iterator_B)> (*_iterator_A,*_iterator_B);
+        }
+
+        _zip::iterator<U,V> &operator++()
+        {
+            ++_iterator_A;
+            ++_iterator_B;
+            
+            return *this;
+        }
+    };
+
+public:
+    _zip(T from, E to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
+
+    auto begin() const{ 
+        return  _zip::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
+
+    auto end() const {
+        return _zip::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
+};  // class
+
+template <typename T, typename E>
+
+_zip<T, E> zip(T first, E second)
+{
+    return _zip<T, E>(first, second);
 }
-}
+
+} 
