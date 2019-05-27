@@ -1,52 +1,56 @@
-namespace itertools
-{
+#include "iostream"
 
-template <class T>
 
-class range
-{
+namespace itertools {
+
+template <typename Template>
+class range {
 
 private:
-    T start; // start
-    T fin;   // end
 
-    class iterator
-    {
+Template start;
+Template finish;
 
-    public:
-  
-        T t_val;
-        iterator(T itr) : t_val(itr){}
-
-        bool operator!=(range::iterator const &other) const
-        { 
-            return t_val != (other.t_val);
-        }
-
-        T operator*() const
-        {
-            return t_val;
-        }
-
-        range::iterator &operator++()
-        {
-            ++t_val;
-            return *this;
-        }
-    };
+class iterator
+{
 
 public:
-    range(T from, T to) : start(from), fin(to) {}                     
-    range::iterator begin() const { return range::iterator(start); } 
-    range::iterator end() const { return range::iterator(fin); }      
-}; 
+Template it;
 
-    
-template <typename T>
-
-range<T> myrange(T from, T to)
-{
-    return range<T>(from, to);
+//constructor
+iterator(Template v) : it(v){
 }
 
-} 
+// operators
+bool operator!=(iterator const &other) const
+{
+        return it != other.it;
+}
+bool operator== (range::iterator const &other) const
+{
+        return it == other.it;
+
+}
+Template operator*() const
+{
+        return it;
+}
+iterator &operator++()
+{
+
+        ++it;
+        return *this;
+}
+};
+
+public:
+range(Template from, Template to) : start(from), finish(to) {
+}
+iterator begin() const {
+        return iterator(start);
+}
+iterator end() const {
+        return iterator(finish);
+}
+};
+}

@@ -1,101 +1,74 @@
-#include <utility> // pair
-#include "iteroutput.hpp"
 
-namespace itertools
-{
+#include "iostream"
 
 
-template <class T, class E>
-/*
-* _product class, using two iteratables to iterate over them in pairs (I.E returns elements of type std::pair<T,E>).
-* the values given to the constructor must be a iteratable objects (implementing begin() and end() functions).
-* and an iterator (ofcourse) which implements the following operators: != (not equal), ++ (prefix increment).
-* the _product class contains inner iterator.
-* Note: calling the product(T,E) function instead of the class _product is recommended.
-*/
-class _product
-{
-    // Private variables and methods
-private:
-    const T& _iteratable_A;    // first iteratable - should be an iteratable
-    const E& _iteratable_B;    // second iteratable - should be an iteratable
+namespace itertools {
+bool Help=false;
+    template <typename Template1, typename Template2>
 
-    // Inner class (iterator)
-    template <typename U, typename V>
-    class iterator
-    {
+    class product {
+
+    private:
+        Template1 it1;
+        Template2 it2;
+
     public:
-        // variables
-        U _iterator_A; //  should be an iterator
-        V _iterator_B; //  should be an iterator
+        product(Template1 start, Template2 end) :  it1(start), it2(end) {
+          Help=false;
+          if(!(end.begin()!=end.end())){
+            Help=true;
+          }
+        }
 
-        V _iterator_B_start_pos; //  should be an iterator
+    auto begin() const{
+        return  iterator<decltype(it1.begin()),decltype(it2.begin())>(it1.begin(), it2.begin()); }  // iteratable object
 
-        bool first_run = true;
+    auto end() const{
+        return iterator<decltype(it1.end()),decltype(it2.end())>(it1.end(), it2.end()); }  // iteratable object
 
-        //constructor
-        iterator(U iteratable_A, V iteratable_B) : 
-            _iterator_A(iteratable_A), 
-            _iterator_B(iteratable_B),
-            _iterator_B_start_pos(iteratable_B) 
-            {
-                
+    template <typename C1, typename C2>
+        class iterator {
+
+        private:
+            C1 it1;
+            C2 it2;
+            C2 pos;
+            bool save;
+
+        public:
+            iterator(C1 itA , C2 itB): it1(itA) , it2(itB) , pos(it2),save(false) {}
+
+           iterator<C1,C2>& operator++() {
+            if(!save)
+               ++it2;
+               return *this;
+
             }
 
-        // operators
-        bool operator!=(_product::iterator<U,V> const &other) 
-        {            
-            if(first_run) {
-                if(!(_iterator_B != other._iterator_B)) {
-                    return false;
+            auto operator*() const {
+
+             return  std::pair<decltype(*it1),decltype(*it2)> (*it1 , *it2);
+            }
+
+            bool operator!=(iterator const  it){
+                if((it1 != it.it1) && !(it2 != it.it2)){
+                  save=true;
                 }
+                if(save){
 
-                first_run = false;
+                save=false;
+                    it2 = pos;
+                    ++it1;
+                }
+                return (it1 != it.it1&& !Help);
+
             }
 
-            // if iterator A hasn't finish yet, and B finished, then rewind B to the start.
-            if ((_iterator_A != other._iterator_A) && !(_iterator_B != other._iterator_B))
-            { // rewind B
-                _iterator_B = _iterator_B_start_pos;
-                ++_iterator_A;
-            }
 
-            return (_iterator_A != other._iterator_A);
-        }
 
-        std::pair<decltype(*_iterator_A),decltype(*_iterator_B)> operator*() const
-        {
-            return std::pair< decltype(*_iterator_A),
-                              decltype(*_iterator_B)> (*_iterator_A,*_iterator_B);
-        }
+        };
 
-        _product::iterator<U,V> &operator++()
-        {
-            ++_iterator_B;
-            return *this;
-        }
+
     };
 
-public:
-    _product(const T& from, const E& to) : _iteratable_A(from), _iteratable_B(to) {} // constructor
-
-    auto begin() const{ 
-        return  _product::iterator<decltype(_iteratable_A.begin()),decltype(_iteratable_B.begin())>(_iteratable_A.begin(), _iteratable_B.begin()); }  // iteratable object
-
-    auto end() const {
-        return _product::iterator<decltype(_iteratable_A.end()),decltype(_iteratable_B.end())>(_iteratable_A.end(), _iteratable_B.end()); }  // iteratable object  
-};  // class
-
-template <typename T, typename E>
-/*
-* product function, use in loops to iterate over two iteratables in set-product-like scheme.
-* Example use case: 
-* for(std::pair<char,char> p : product(range('A','E'), string("niko")))
-*   // do somethin...
-*/
-_product<T, E> product(const T& first, const E& second)
-{
-    return _product<T, E>(first, second);
 }
-
-} // namespace itertools

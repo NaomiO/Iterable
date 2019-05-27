@@ -1,73 +1,62 @@
-namespace itertools
-{
+#include "iostream"
 
-template <class A, class B>
+namespace itertools {
 
-class chain
-{
+template <typename Template1, typename Template2>
+class chain {
+
 private:
-    A first;   
-    B second;    
-    
-    template <typename U, typename V>
-    class iterator
-    {
-    public:
- 
-        U itr1; 
-        V itr2; 
-
-        bool flag;
-
-        iterator(U first, V second) : itr1(first), itr2(second), flag(true) {}
-
-        bool operator!=(chain::iterator<U,V> const &other) 
-        {
-            if (flag && !(itr1 != (other.itr1)))
-                flag = false;
-
-            if(flag)
-                return (itr1 != (other.itr1));
-            else 
-                return (itr2 != (other.itr2));
-
-            
-        }
-
-        decltype(*itr1) operator*() const
-        {
-            if(flag)
-                return *itr1;
-            else
-                return *itr2;
-        }
-
-        chain::iterator<U,V> &operator++()
-        {
-            if(flag)
-                ++itr1;
-            else 
-                ++itr2;
-            
-            return *this;
-        }
-    };
+Template1 it1;
+Template2 it2;
 
 public:
-    chain(A from, B to) : first(from), second(to) {} // constructor
-
-    auto begin() const{ 
-        return  chain::iterator<decltype(first.begin()),decltype(second.begin())>(first.begin(), second.begin()); }  // iteratable object
-
-    auto end() const {
-        return chain::iterator<decltype(first.end()),decltype(second.end())>(first.end(), second.end()); }  // iteratable object  
-};  // class
-
-template <typename A, typename B>
-
-chain<A, B> mychain(A chain1, B chain2)
-{
-    return mychain<A, B>(chain1, chain2);
+chain(Template1 start, Template2 end) :  it1(start), it2(end) {
 }
 
-} 
+auto begin() const{
+        return iterator<decltype(it1.begin()),decltype(it2.begin())>(it1.begin(), it2.begin());
+}
+
+auto end() const{
+        return iterator<decltype(it1.end()),decltype(it2.end())>(it1.end(), it2.end());
+}
+template <typename C1, typename C2>
+class iterator {
+
+private:
+C1 it1;
+C2 it2;
+bool some;
+
+public:
+iterator(C1 itA, C2 itB) : it1(itA), it2(itB), some(true)  {
+}
+
+iterator<C1,C2>& operator++() {
+        if(some==true)
+                ++it1;
+        else
+                ++it2;
+        return *this;
+}
+decltype(*it1) operator*() const {
+
+        if(some)
+                return *it1;
+        else
+                return *it2;
+}
+bool operator!=(iterator<C1,C2>  it){
+        if(some && !(it1 != it.it1)) {
+                some = false;
+        }
+        if(some) {
+                return it1 != it.it1;
+        }else{
+                return it2 != it.it2;
+        }
+}
+};
+
+};
+}
